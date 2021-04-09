@@ -19,7 +19,6 @@ public class Country {
     }
 
     void addRoad(String firstCityName, String secondCityName, int drivingTime) {
-        // TODO only one road for two cities
         // może dodawać misato jak nie istnieje?
         City city1 = new City(firstCityName);
         City city2 = new City(secondCityName);
