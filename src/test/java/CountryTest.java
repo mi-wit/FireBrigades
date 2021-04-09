@@ -16,6 +16,7 @@ public class CountryTest {
         country.addCity("A");
         country.addCity("B");
         country.addCity("C");
+
     }
 
     @Test
@@ -65,6 +66,6 @@ public class CountryTest {
         expectedCities.add(new City("A"));
         expectedCities.add(new City("D"));
 
-       // Assert.assertEquals(expectedCities, country.getFireBrigadeCities(maxDrivingTime, timeout));
+        Assert.assertEquals(expectedCities, country.getFireBrigadeCities(maxDrivingTime, timeout));
     }
 }

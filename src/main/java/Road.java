@@ -30,4 +30,12 @@ public class Road {
     public int hashCode() {
         return Objects.hash(destinationCity, drivingTime);
     }
+
+    @Override
+    public String toString() {
+        return "Road{" +
+                "destinationCity=" + destinationCity +
+                ", drivingTime=" + drivingTime +
+                '}';
+    }
 }
