@@ -1,10 +1,19 @@
 import java.util.Objects;
 
 public class City {
-    String name;
+    private String name;
+    private boolean fireBrigade = true;
 
     City(String name) {
         this.name = name;
+    }
+
+    public boolean isFireBrigaded() {
+        return fireBrigade;
+    }
+
+    public void setFireBrigade(boolean fireBrigade) {
+        this.fireBrigade = fireBrigade;
     }
 
     @Override
