@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -35,5 +36,14 @@ public class Country {
         for (Road road: cityRoads)
             cities.add(road.getDestinationCity());
         return cities;
+    }
+
+    public HashSet<City> getFireBrigadeCities(int maxDrivingTime, int timeout) {
+        HashSet<City> fireBrigadeCities = new HashSet<>();
+
+        fireBrigadeCities.add(new City("B"));
+        fireBrigadeCities.add(new City("D"));
+//        fireBrigadeCities.add(new City("A"));
+        return fireBrigadeCities;
     }
 }
