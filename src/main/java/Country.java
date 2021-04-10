@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Country {
 
     private final Map<City, List<Road>> connectedCities;
+    private int maxDrivingTime;
 
     public Country(Map<City, List<Road>> connectedCities) {
         this.connectedCities = connectedCities;
@@ -15,12 +13,21 @@ public class Country {
         return connectedCities;
     }
 
-    void addCity(String name) {
+    public int getMaxDrivingTime() {
+        return maxDrivingTime;
+    }
+
+    public void setMaxDrivingTime(int maxDrivingTime) {
+        this.maxDrivingTime = maxDrivingTime;
+    }
+
+    void addCityIfNotExist(String name) {
         connectedCities.putIfAbsent(new City(name), new ArrayList<>());
     }
 
     void addRoad(String firstCityName, String secondCityName, int drivingTime) {
-        // może dodawać misato jak nie istnieje?
+        addCityIfNotExist(firstCityName);
+        addCityIfNotExist(secondCityName);
         City city1 = new City(firstCityName);
         City city2 = new City(secondCityName);
         if (connectedCities.get(city1).contains(new Road(city2, drivingTime)))
@@ -33,17 +40,55 @@ public class Country {
     List<City> getNeighbourCities(String cityName) {
         List<Road> cityRoads = connectedCities.get(new City(cityName));
         List<City> cities = new ArrayList<>();
-        for (Road road: cityRoads)
+        for (Road road : cityRoads)
             cities.add(road.getDestinationCity());
         return cities;
     }
 
-    public HashSet<City> getFireBrigadeCities(int maxDrivingTime, int timeout) {
-        HashSet<City> fireBrigadeCities = new HashSet<>();
+    public Set<City> getFireBrigadeCities(int timeout) {
 
-        fireBrigadeCities.add(new City("B"));
-        fireBrigadeCities.add(new City("D"));
-//        fireBrigadeCities.add(new City("A"));
+        Set<City> finalFireBrigadeCities = new HashSet<>();
+        Set<City> currentFireBrigadeCities;
+        long start = System.currentTimeMillis();
+        long timeElapsed = 0;
+        do {
+            currentFireBrigadeCities = getApproximationOfCities();
+            if (currentFireBrigadeCities.size() < finalFireBrigadeCities.size() || finalFireBrigadeCities.isEmpty())
+                finalFireBrigadeCities = currentFireBrigadeCities;
+
+            timeElapsed = System.currentTimeMillis() - start;
+        } while (timeElapsed < timeout * 1000);
+
+        return finalFireBrigadeCities;
+    }
+
+    private Set<City> getApproximationOfCities() {
+        Random random = new Random();
+        ArrayList<City> cities = new ArrayList<>(connectedCities.keySet());
+        Set<City> fireBrigadeCities = new HashSet<>();
+
+        do {
+            City rndCity = cities.get(random.nextInt(cities.size()));
+            cities.remove(rndCity);
+            fireBrigadeCities.add(rndCity);
+            removeCities(rndCity, 0, cities);
+
+        } while (cities.size() > 0);
+
         return fireBrigadeCities;
+    }
+
+    private void removeCities(City city, int drivingTime, ArrayList<City> cities) {
+        int thisCityDrivingTime = drivingTime;
+        for (Road road : connectedCities.get(city)) {
+            drivingTime += road.getDrivingTime();
+            if (drivingTime <= maxDrivingTime) {
+                cities.remove(road.getDestinationCity());
+                removeCities(road.getDestinationCity(), drivingTime, cities);
+            }
+            drivingTime = thisCityDrivingTime;
+        }
+
+
     }
 }

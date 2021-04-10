@@ -1,6 +1,5 @@
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -12,15 +11,15 @@ public class CountryTest {
     @Before
     public void makeEmptyCountry() {
         country = new Country(new HashMap<>());
-        country.addCity("A");
-        country.addCity("B");
-        country.addCity("C");
+        country.addCityIfNotExist("A");
+        country.addCityIfNotExist("B");
+        country.addCityIfNotExist("C");
 
     }
 
     @Test
     public void addCityNoRoadsTest() {
-        country.addCity("A");
+        country.addCityIfNotExist("A");
         Assert.assertEquals(new ArrayList<City>(), country.getNeighbourCities("A"));
     }
 
@@ -53,20 +52,18 @@ public class CountryTest {
 
     @Test
     public void getFireBrigadeCitiesStarGraphTest() {
-        country.addCity("D");
-        country.addCity("E");
+        country.addCityIfNotExist("D");
+        country.addCityIfNotExist("E");
         country.addRoad("A", "B", 2);
         country.addRoad("A", "C", 3);
         country.addRoad("A", "D", 4);
         country.addRoad("A", "E", 1);
-        int maxDrivingTime = 10;
+        country.setMaxDrivingTime(10);
         int timeout = 5;
 
-//        ArrayList<City> expectedCities = new ArrayList<>();
-//        expectedCities.add(new City("A"));
 
-        HashSet<City> actual = country.getFireBrigadeCities(maxDrivingTime, timeout);
-//        Assert.assertEquals(expectedCities, actual);
+        Set<City> actual = country.getFireBrigadeCities(timeout);
+        System.out.println(actual);
         Assert.assertTrue(
                 Collections.singleton(new City("A")).equals(actual) ||
                         Collections.singleton(new City("B")).equals(actual) ||
@@ -78,15 +75,16 @@ public class CountryTest {
 
     @Test
     public void getFireBrigadeCitiesLongGraphTest() {
-        country.addCity("D");
+        country.addCityIfNotExist("D");
         country.addRoad("A", "B", 11);
         country.addRoad("A", "D", 8);
         country.addRoad("D", "C", 1);
-        int maxDrivingTime = 8;
+        country.setMaxDrivingTime(8);
         int timeout = 5;
 
-        HashSet<City> actual = country.getFireBrigadeCities(maxDrivingTime, timeout);
-        HashSet<City> expected = new HashSet<>();
+        Set<City> actual = country.getFireBrigadeCities(timeout);
+        Set<City> expected = new HashSet<>();
+        System.out.println(actual);
         expected.add(new City("B"));
         expected.add(new City("D"));
 
@@ -96,18 +94,18 @@ public class CountryTest {
 
     @Test
     public void getFireBrigadeCitiesStraightGraphTest() {
-        country.addCity("D");
-        country.addCity("E");
-        country.addCity("F");
+        country.addCityIfNotExist("D");
+        country.addCityIfNotExist("E");
+        country.addCityIfNotExist("F");
         country.addRoad("A", "B", 1);
         country.addRoad("B", "C", 1);
         country.addRoad("C", "D", 1);
         country.addRoad("D", "E", 1);
         country.addRoad("E", "F", 1);
-        int maxDrivingTime = 5;
+        country.setMaxDrivingTime(5);
         int timeout = 5;
 
-        HashSet<City> actual = country.getFireBrigadeCities(maxDrivingTime, timeout);
+        Set<City> actual = country.getFireBrigadeCities(timeout);
 
         Assert.assertTrue(
                 Collections.singleton(new City("A")).equals(actual) ||
