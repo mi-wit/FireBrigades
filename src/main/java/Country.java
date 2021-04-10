@@ -3,7 +3,7 @@ import java.util.*;
 public class Country {
 
     private final Map<City, List<Road>> connectedCities;
-    private int maxDrivingTime;
+    private long maxDrivingTime;
 
     public Country(Map<City, List<Road>> connectedCities) {
         this.connectedCities = connectedCities;
@@ -13,7 +13,7 @@ public class Country {
         return connectedCities;
     }
 
-    public int getMaxDrivingTime() {
+    public long getMaxDrivingTime() {
         return maxDrivingTime;
     }
 
@@ -45,12 +45,12 @@ public class Country {
         return cities;
     }
 
-    public Set<City> getFireBrigadeCities(int timeout) {
+    public Set<City> getFireBrigadeCities(long timeout) {
 
         Set<City> finalFireBrigadeCities = new HashSet<>();
         Set<City> currentFireBrigadeCities;
         long start = System.currentTimeMillis();
-        long timeElapsed = 0;
+        long timeElapsed;
         do {
             currentFireBrigadeCities = getApproximationOfCities();
             if (currentFireBrigadeCities.size() < finalFireBrigadeCities.size() || finalFireBrigadeCities.isEmpty())

@@ -116,4 +116,31 @@ public class CountryTest {
                         Collections.singleton(new City("F")).equals(actual)
         );
     }
+    @Test
+    public void getFireBrigadeCitiesBigCountryTest() {
+        Random random = new Random();
+        long numberOfCities = 999999;
+        for (int i = 0; i < numberOfCities; i++)
+            country.addCityIfNotExist(String.valueOf(i));
+
+        ArrayList<City> cities;
+        for (int i = 0; i < numberOfCities / 100; i++) {
+            cities = new ArrayList<>(country.getConnectedCities().keySet());
+            String rndCity1 = cities.get(random.nextInt(cities.size())).getName();
+            String rndCity2 = cities.get(random.nextInt(cities.size())).getName();
+
+            try {
+                if (!rndCity1.equals(rndCity2))
+                    country.addRoad(rndCity1, rndCity2, random.nextInt(100));
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+        }
+
+        country.setMaxDrivingTime(50);
+        long timeout = 10;
+
+       //Set<City> actual = country.getFireBrigadeCities(timeout);
+
+    }
 }
