@@ -60,10 +60,9 @@ public class CountryTest {
         country.addRoad("A", "D", 4);
         country.addRoad("A", "E", 1);
         country.setMaxDrivingTime(10);
-        int timeout = 5;
+        country.setTimeout(5);
 
-
-        Set<City> actual = country.getFireBrigadeCities(timeout);
+        Set<City> actual = country.getFireBrigadeCities();
         Assert.assertTrue(
                 Collections.singleton(new City("A")).equals(actual) ||
                         Collections.singleton(new City("B")).equals(actual) ||
@@ -80,9 +79,9 @@ public class CountryTest {
         country.addRoad("A", "D", 8);
         country.addRoad("D", "C", 1);
         country.setMaxDrivingTime(8);
-        int timeout = 5;
+        country.setTimeout(5);
 
-        Set<City> actual = country.getFireBrigadeCities(timeout);
+        Set<City> actual = country.getFireBrigadeCities();
         Set<City> expected = new HashSet<>();
         expected.add(new City("B"));
         expected.add(new City("D"));
@@ -102,9 +101,9 @@ public class CountryTest {
         country.addRoad("D", "E", 1);
         country.addRoad("E", "F", 1);
         country.setMaxDrivingTime(5);
-        int timeout = 5;
+        country.setTimeout(5);
 
-        Set<City> actual = country.getFireBrigadeCities(timeout);
+        Set<City> actual = country.getFireBrigadeCities();
 
         Assert.assertTrue(
                 Collections.singleton(new City("A")).equals(actual) ||
@@ -157,9 +156,9 @@ public class CountryTest {
         country.addRoad("F", "G", 1);
         country.addRoad("G", "H", 1);
         country.setMaxDrivingTime(10);
-        int timeout = 5;
+        country.setTimeout(5);
 
-        Set<City> actual = country.getFireBrigadeCities(timeout);
+        Set<City> actual = country.getFireBrigadeCities();
         Set<City> expected = new HashSet<>();
         expected.add(new City("B"));
         expected.add(new City("C"));
@@ -179,9 +178,9 @@ public class CountryTest {
         country.addRoad("D", "E", 2);
         country.addRoad("E", "A", 2);
         country.setMaxDrivingTime(10);
-        int timeout = 5;
+        country.setTimeout(5);
 
-        Set<City> actual = country.getFireBrigadeCities(timeout);
+        Set<City> actual = country.getFireBrigadeCities();
 
         Assert.assertTrue(
                 Collections.singleton(new City("A")).equals(actual) ||

@@ -4,6 +4,7 @@ public class Country {
 
     private final Map<City, List<Road>> connectedCities;
     private long maxDrivingTime;
+    private long timeout;
 
     public Country(Map<City, List<Road>> connectedCities) {
         this.connectedCities = connectedCities;
@@ -13,13 +14,6 @@ public class Country {
         return connectedCities;
     }
 
-    public long getMaxDrivingTime() {
-        return maxDrivingTime;
-    }
-
-    public void setMaxDrivingTime(int maxDrivingTime) {
-        this.maxDrivingTime = maxDrivingTime;
-    }
 
     void addCityIfNotExist(String name) {
         connectedCities.putIfAbsent(new City(name), new ArrayList<>());
@@ -45,7 +39,7 @@ public class Country {
         return cities;
     }
 
-    public Set<City> getFireBrigadeCities(long timeout) {
+    public Set<City> getFireBrigadeCities() {
 
         Set<City> finalFireBrigadeCities = new HashSet<>();
         Set<City> currentFireBrigadeCities;
@@ -94,5 +88,13 @@ public class Country {
         }
 
 
+    }
+
+    public void setMaxDrivingTime(int maxDrivingTime) {
+        this.maxDrivingTime = maxDrivingTime;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 }

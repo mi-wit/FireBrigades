@@ -36,7 +36,17 @@ public class JSONCountryReader {
                     String.valueOf(roadEnds.get(1)),
                     drivingTime);
         }
+
+        country.setTimeout(jo.getInt("timeout"));
+        country.setMaxDrivingTime(jo.getInt("max_czas_przejazdu"));
+
         return country;
+    }
+
+    public int getTimeout() {
+        String jsonText = readJSON();
+        JSONObject jo = new JSONObject(jsonText);
+        return jo.getInt("timeout");
     }
 
     private Set<String> getCities(JSONObject jo) {
@@ -45,6 +55,7 @@ public class JSONCountryReader {
             cities.add(city.toString());
         return cities;
     }
+
 
     private String readJSON() {
         String jsonText = "";
