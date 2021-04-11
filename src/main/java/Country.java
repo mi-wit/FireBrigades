@@ -51,11 +51,15 @@ public class Country {
         Set<City> currentFireBrigadeCities;
         long start = System.currentTimeMillis();
         long timeElapsed;
+        long timesSameApproximation = timeout * 100;
         do {
             currentFireBrigadeCities = getApproximationOfCities();
-            if (currentFireBrigadeCities.size() < finalFireBrigadeCities.size() || finalFireBrigadeCities.isEmpty())
+            if (currentFireBrigadeCities.size() < finalFireBrigadeCities.size() || finalFireBrigadeCities.isEmpty()) {
                 finalFireBrigadeCities = currentFireBrigadeCities;
+                timesSameApproximation = timeout * 100;
+            }
 
+            timesSameApproximation--;
             timeElapsed = System.currentTimeMillis() - start;
         } while (timeElapsed < timeout * 1000);
 

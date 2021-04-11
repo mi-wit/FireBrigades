@@ -1,5 +1,6 @@
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -63,7 +64,6 @@ public class CountryTest {
 
 
         Set<City> actual = country.getFireBrigadeCities(timeout);
-        System.out.println(actual);
         Assert.assertTrue(
                 Collections.singleton(new City("A")).equals(actual) ||
                         Collections.singleton(new City("B")).equals(actual) ||
@@ -84,7 +84,6 @@ public class CountryTest {
 
         Set<City> actual = country.getFireBrigadeCities(timeout);
         Set<City> expected = new HashSet<>();
-        System.out.println(actual);
         expected.add(new City("B"));
         expected.add(new City("D"));
 
@@ -116,6 +115,7 @@ public class CountryTest {
                         Collections.singleton(new City("F")).equals(actual)
         );
     }
+    @Ignore("Too big for now")
     @Test
     public void getFireBrigadeCitiesBigCountryTest() {
         Random random = new Random();
@@ -132,15 +132,64 @@ public class CountryTest {
             try {
                 if (!rndCity1.equals(rndCity2))
                     country.addRoad(rndCity1, rndCity2, random.nextInt(100));
-            } catch (IllegalArgumentException e) {
-                continue;
+            } catch (IllegalArgumentException ignored) {
             }
         }
 
         country.setMaxDrivingTime(50);
-        long timeout = 10;
+//        long timeout = 10;
 
-       //Set<City> actual = country.getFireBrigadeCities(timeout);
+//       Set<City> actual = country.getFireBrigadeCities(timeout);
+    }
 
+    @Test
+    public void getFireBrigadeCitiesSpreadCountryTest() {
+        country.addCityIfNotExist("D");
+        country.addCityIfNotExist("E");
+        country.addCityIfNotExist("F");
+        country.addCityIfNotExist("G");
+        country.addCityIfNotExist("H");
+        country.addRoad("A", "B", 11);
+        country.addRoad("A", "C", 11);
+        country.addRoad("A", "D", 11);
+        country.addRoad("A", "E", 10);
+        country.addRoad("E", "F", 1);
+        country.addRoad("F", "G", 1);
+        country.addRoad("G", "H", 1);
+        country.setMaxDrivingTime(10);
+        int timeout = 5;
+
+        Set<City> actual = country.getFireBrigadeCities(timeout);
+        Set<City> expected = new HashSet<>();
+        expected.add(new City("B"));
+        expected.add(new City("C"));
+        expected.add(new City("D"));
+        expected.add(new City("E"));
+
+        Assert.assertEquals(expected, actual);
+
+    }
+    @Test
+    public void getFireBrigadeCitiesCircleCountryTest() {
+        country.addCityIfNotExist("D");
+        country.addCityIfNotExist("E");
+        country.addRoad("A", "B", 2);
+        country.addRoad("B", "C", 2);
+        country.addRoad("C", "D", 2);
+        country.addRoad("D", "E", 2);
+        country.addRoad("E", "A", 2);
+        country.setMaxDrivingTime(10);
+        int timeout = 5;
+
+        Set<City> actual = country.getFireBrigadeCities(timeout);
+
+        Assert.assertTrue(
+                Collections.singleton(new City("A")).equals(actual) ||
+                        Collections.singleton(new City("B")).equals(actual) ||
+                        Collections.singleton(new City("C")).equals(actual) ||
+                        Collections.singleton(new City("D")).equals(actual) ||
+                        Collections.singleton(new City("E")).equals(actual) ||
+                        Collections.singleton(new City("F")).equals(actual)
+        );
     }
 }
