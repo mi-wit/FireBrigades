@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.Callable;
 
 public class Country {
 
@@ -60,7 +61,7 @@ public class Country {
         return finalFireBrigadeCities;
     }
 
-    private Set<City> getApproximationOfCities() {
+    public Set<City> getApproximationOfCities() {
         Random random = new Random();
         ArrayList<City> cities = new ArrayList<>(connectedCities.keySet());
         Set<City> fireBrigadeCities = new HashSet<>();
@@ -78,13 +79,17 @@ public class Country {
 
     private void removeCities(City city, int drivingTime, ArrayList<City> cities) {
         int thisCityDrivingTime = drivingTime;
+        Set<Road> visited = new HashSet<>();
         for (Road road : connectedCities.get(city)) {
-            drivingTime += road.getDrivingTime();
-            if (drivingTime <= maxDrivingTime) {
-                cities.remove(road.getDestinationCity());
-                removeCities(road.getDestinationCity(), drivingTime, cities);
+            if (!visited.contains(road)) {
+                visited.add(road);
+                drivingTime += road.getDrivingTime();
+                if (drivingTime <= maxDrivingTime) {
+                    cities.remove(road.getDestinationCity());
+                    removeCities(road.getDestinationCity(), drivingTime, cities);
+                }
+                drivingTime = thisCityDrivingTime;
             }
-            drivingTime = thisCityDrivingTime;
         }
 
 
@@ -97,4 +102,9 @@ public class Country {
     public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
 }

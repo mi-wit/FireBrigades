@@ -1,25 +1,27 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONWriter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
-public class JSONCountryReader {
-    private final File file;
+public class JSONCountry {
+    private final File inFile;
+    private final File outFile;
+    JSONObject jo;
 
-    public JSONCountryReader(String fileName) {
-        this.file = new File(fileName);
+    public JSONCountry(String inFileName, String outFileName) {
+        this.inFile = new File(inFileName);
+        this.outFile = new File(outFileName);
+        String jsonText = readJSON();
+        jo = new JSONObject(jsonText);
     }
 
 
     public Country getCountry() {
-        String jsonText = readJSON();
-        JSONObject jo = new JSONObject(jsonText);
-
         Country country = new Country(new HashMap<>());
         // adding cities
         Set<String> cities = getCities(jo);
@@ -43,9 +45,7 @@ public class JSONCountryReader {
         return country;
     }
 
-    public int getTimeout() {
-        String jsonText = readJSON();
-        JSONObject jo = new JSONObject(jsonText);
+    public int getTimeoutInSeconds() {
         return jo.getInt("timeout");
     }
 
@@ -60,10 +60,26 @@ public class JSONCountryReader {
     private String readJSON() {
         String jsonText = "";
         try {
-            jsonText = new Scanner(file).useDelimiter("\\Z").next();
+            jsonText = new Scanner(inFile).useDelimiter("\\Z").next();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return jsonText;
+    }
+
+    public void saveJSON(Set<String> list) {
+        try {
+            FileWriter fileWriter = new FileWriter(outFile);
+            JSONWriter jsonWriter = new JSONWriter(fileWriter);
+
+            jsonWriter.array();
+            for (String name : list)
+                jsonWriter.value(name);
+            jsonWriter.endArray();
+
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
