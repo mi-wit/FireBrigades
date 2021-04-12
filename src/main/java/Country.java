@@ -102,5 +102,16 @@ public class Country {
         this.maxDrivingTime = maxDrivingTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Country country = (Country) o;
+        return maxDrivingTime == country.maxDrivingTime && connectedCities.equals(country.connectedCities);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(connectedCities, maxDrivingTime);
+    }
 }
