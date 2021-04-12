@@ -1,25 +1,32 @@
 
 import java.util.*;
 
-public class FireBrigadesThread implements Runnable{
-    Set<City> finalFireBrigadeCities = new HashSet<>();
+public class FireBrigadesThread implements Runnable {
+    Set<City> bestSoFarFireBrigadesCities = new HashSet<>();
     Set<City> currentFireBrigadeCities = new HashSet<>();
+    Country country;
+
+    public FireBrigadesThread(Country country) {
+        this.country = country;
+    }
+
     @Override
-    public void run(){
-        JSONCountry countryReader = new JSONCountry("in.json", "out.json");
-        Country country = new Country(new HashMap<>());
-        country = countryReader.getCountry();
+    public void run() {
         do {
             currentFireBrigadeCities = country.getApproximationOfCities();
-            if (currentFireBrigadeCities.size() < finalFireBrigadeCities.size() || finalFireBrigadeCities.isEmpty()) {
-                finalFireBrigadeCities = currentFireBrigadeCities;
+            if (weGotABetterApproximation()) {
+                bestSoFarFireBrigadesCities = currentFireBrigadeCities;
             }
 
         } while (!Thread.currentThread().isInterrupted());
 
     }
 
+    private boolean weGotABetterApproximation() {
+        return currentFireBrigadeCities.size() < bestSoFarFireBrigadesCities.size() || bestSoFarFireBrigadesCities.isEmpty();
+    }
+
     public Set<City> getFinalFireBrigadeCities() {
-        return finalFireBrigadeCities;
+        return bestSoFarFireBrigadesCities;
     }
 }

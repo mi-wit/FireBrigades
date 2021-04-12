@@ -39,7 +39,6 @@ public class JSONCountry {
                     drivingTime);
         }
 
-        country.setTimeout(jo.getInt("timeout"));
         country.setMaxDrivingTime(jo.getInt("max_czas_przejazdu"));
 
         return country;

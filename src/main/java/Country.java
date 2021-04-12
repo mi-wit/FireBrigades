@@ -1,11 +1,9 @@
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public class Country {
 
     private final Map<City, List<Road>> connectedCities;
     private long maxDrivingTime;
-    private long timeout;
 
     public Country(Map<City, List<Road>> connectedCities) {
         this.connectedCities = connectedCities;
@@ -14,7 +12,6 @@ public class Country {
     public Map<City, List<Road>> getConnectedCities() {
         return connectedCities;
     }
-
 
     void addCityIfNotExist(String name) {
         connectedCities.putIfAbsent(new City(name), new ArrayList<>());
@@ -66,15 +63,21 @@ public class Country {
         ArrayList<City> cities = new ArrayList<>(connectedCities.keySet());
         Set<City> fireBrigadeCities = new HashSet<>();
 
+        boolean threadInterrupted;
         do {
             City rndCity = cities.get(random.nextInt(cities.size()));
             cities.remove(rndCity);
             fireBrigadeCities.add(rndCity);
             removeCities(rndCity, 0, cities);
 
-        } while (cities.size() > 0);
+            threadInterrupted = Thread.currentThread().isInterrupted();
+        } while (cities.size() > 0 && !threadInterrupted);
 
-        return fireBrigadeCities;
+        if (threadInterrupted)
+            return connectedCities.keySet();   // if the thread was interrupted return all cities
+        else
+            return fireBrigadeCities;
+
     }
 
     private void removeCities(City city, int drivingTime, ArrayList<City> cities) {
@@ -99,12 +102,5 @@ public class Country {
         this.maxDrivingTime = maxDrivingTime;
     }
 
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
-    public long getTimeout() {
-        return timeout;
-    }
 
 }

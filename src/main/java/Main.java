@@ -5,32 +5,24 @@ public class Main {
     public static void main(String[] args) {
         //TODO zakresy zmiennych większe niż 0
         JSONCountry jsonCountry = new JSONCountry("in.json", "out.json");
-        Set<City> finalFireBrigadeCities;
         long timeout = jsonCountry.getTimeoutInSeconds();
-        finalFireBrigadeCities = getFinalFireBrigadeCities(timeout);
+        Country country = jsonCountry.getCountry();
+
+        Set<City> finalFireBrigadeCities = getFinalFireBrigadeCities(timeout, country);
 
         saveToFile(jsonCountry, finalFireBrigadeCities);
         System.out.println(finalFireBrigadeCities);
     }
 
-    private static void saveToFile(JSONCountry jsonCountry, Set<City> finalFireBrigadeCities) {
-        City[] cities = finalFireBrigadeCities.toArray(City[]::new);
-        Set<String> names= new HashSet<>();
-        for (City city: cities)
-            names.add(city.getName());
-
-        jsonCountry.saveJSON(names);
-    }
-
-    private static Set<City> getFinalFireBrigadeCities(long timeout) {
+    private static Set<City> getFinalFireBrigadeCities(long timeout, Country country) {
         Set<City> finalFireBrigadeCities = new HashSet<>();
-        long start = System.currentTimeMillis();
+        long timeMeasureStart = System.currentTimeMillis();
         try {
-            FireBrigadesThread fireBrigadesThread = new FireBrigadesThread();
+            FireBrigadesThread fireBrigadesThread = new FireBrigadesThread(country);
             Thread thread = new Thread(fireBrigadesThread);
-            thread.start();
+            thread.start(); // Here runs the main program, it will read file, calculate optimal
 
-            printProgressBar(timeout, start);
+            printProgressBar(timeout, timeMeasureStart);
             thread.interrupt();
             thread.join();
 
@@ -42,10 +34,20 @@ public class Main {
         return finalFireBrigadeCities;
     }
 
-    private static void printProgressBar(long timeout, long start) {
+    private static void saveToFile(JSONCountry jsonCountry, Set<City> finalFireBrigadeCities) {
+        // converting Set<City> to Set<String>
+        City[] cities = finalFireBrigadeCities.toArray(City[]::new);
+        Set<String> names= new HashSet<>();
+        for (City city: cities)
+            names.add(city.getName());
+
+        jsonCountry.saveJSON(names);
+    }
+
+    private static void printProgressBar(long timeout, long timeMeasureStart) {
         System.out.print("working");
         long currentTime = 0;
-        while (System.currentTimeMillis() - start < timeout * 1000) {
+        while (System.currentTimeMillis() - timeMeasureStart < timeout * 1000) {
             long ct = System.currentTimeMillis();
             if (ct % 1000 == 0 && ct != currentTime) {
                 System.out.append('.');
