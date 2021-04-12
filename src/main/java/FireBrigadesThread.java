@@ -5,7 +5,6 @@ public class FireBrigadesThread implements Runnable {
     Set<City> bestSoFarFireBrigadesCities = new HashSet<>();
     Set<City> currentFireBrigadeCities = new HashSet<>();
     Country country;
-
     public FireBrigadesThread(Country country) {
         this.country = country;
     }

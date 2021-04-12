@@ -52,6 +52,7 @@ public class JSONCountry {
         Set<String> cities = new HashSet<>();
         for (Object city : jo.getJSONArray("miasta"))
             cities.add(city.toString());
+
         return cities;
     }
 

@@ -37,35 +37,13 @@ public class Country {
         return cities;
     }
 
-    public Set<City> getFireBrigadeCities() {
-
-        Set<City> finalFireBrigadeCities = new HashSet<>();
-        Set<City> currentFireBrigadeCities;
-        long start = System.currentTimeMillis();
-        long timeElapsed;
-        long timesSameApproximation = timeout * 100;
-        do {
-            currentFireBrigadeCities = getApproximationOfCities();
-            if (currentFireBrigadeCities.size() < finalFireBrigadeCities.size() || finalFireBrigadeCities.isEmpty()) {
-                finalFireBrigadeCities = currentFireBrigadeCities;
-                timesSameApproximation = timeout * 100;
-            }
-
-            timesSameApproximation--;
-            timeElapsed = System.currentTimeMillis() - start;
-        } while (timeElapsed < timeout * 1000);
-
-        return finalFireBrigadeCities;
-    }
-
     public Set<City> getApproximationOfCities() {
-        Random random = new Random();
         ArrayList<City> cities = new ArrayList<>(connectedCities.keySet());
         Set<City> fireBrigadeCities = new HashSet<>();
 
         boolean threadInterrupted;
         do {
-            City rndCity = cities.get(random.nextInt(cities.size()));
+            City rndCity = cities.get(randomIndex(cities));
             cities.remove(rndCity);
             fireBrigadeCities.add(rndCity);
             removeCities(rndCity, 0, cities);
@@ -79,6 +57,7 @@ public class Country {
             return fireBrigadeCities;
 
     }
+
 
     private void removeCities(City city, int drivingTime, ArrayList<City> cities) {
         int thisCityDrivingTime = drivingTime;
@@ -96,6 +75,11 @@ public class Country {
         }
 
 
+    }
+
+    private int randomIndex(ArrayList<City> list) {
+        Random random = new Random();
+        return random.nextInt(list.size());
     }
 
     public void setMaxDrivingTime(int maxDrivingTime) {
