@@ -3,7 +3,6 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        //TODO zakresy zmiennych większe niż 0
         runProgram();
     }
 

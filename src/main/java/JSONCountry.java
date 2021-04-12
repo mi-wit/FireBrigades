@@ -11,41 +11,58 @@ import java.util.*;
 public class JSONCountry {
     private final File inFile;
     private final File outFile;
-    JSONObject jo;
+    private JSONObject jo;
+    private Country country;
 
     public JSONCountry(String inFileName, String outFileName) {
         this.inFile = new File(inFileName);
         this.outFile = new File(outFileName);
         String jsonText = readJSON();
         jo = new JSONObject(jsonText);
+        country = new Country(new HashMap<>());
     }
 
 
     public Country getCountry() {
-        Country country = new Country(new HashMap<>());
-        // adding cities
+        addCities();
+        addRoads();
+        addMaxDrivingTime();
+        return country;
+    }
+
+    private void addCities() {
         Set<String> cities = getCities(jo);
         for (String cityName : cities)
             country.addCityIfNotExist(cityName);
+    }
 
-        // adding roads
+    private void addRoads() {
         JSONArray roads = jo.getJSONArray("drogi");
         for (int i = 0; i < roads.length(); i++) {
             JSONArray roadEnds = roads.getJSONObject(i).getJSONArray("miasta");
+
             int drivingTime = roads.getJSONObject(i).getInt("czas_przejazdu");
+            if (drivingTime < 1)
+                throw new IllegalArgumentException("Driving time on road " + roadEnds.get(0) + " " + roadEnds.get(1) + "can't be less than one.");
 
             country.addRoad(String.valueOf(roadEnds.get(0)),
                     String.valueOf(roadEnds.get(1)),
                     drivingTime);
         }
+    }
 
-        country.setMaxDrivingTime(jo.getInt("max_czas_przejazdu"));
-
-        return country;
+    private void addMaxDrivingTime() {
+        int maxDrivingTime = jo.getInt("max_czas_przejazdu");
+        if (maxDrivingTime < 1)
+            throw new IllegalArgumentException("max_driving_time can't be less than one");
+        country.setMaxDrivingTime(maxDrivingTime);
     }
 
     public int getTimeoutInSeconds() {
-        return jo.getInt("timeout");
+        int timeout = jo.getInt("timeout");
+        if (timeout < 1)
+            throw new IllegalArgumentException("timeout can't be less than one.");
+        return timeout;
     }
 
     private Set<String> getCities(JSONObject jo) {
