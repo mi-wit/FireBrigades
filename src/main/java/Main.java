@@ -7,14 +7,15 @@ public class Main {
     }
 
     private static void runProgram() {
-        JSONCountry jsonCountry = new JSONCountry("in.json", "out.json");
+        final String outFile = "out.json";
+        JSONCountry jsonCountry = new JSONCountry("in.json", outFile);
         long timeout = jsonCountry.getTimeoutInSeconds();
         Country country = jsonCountry.getCountry();
 
         Set<City> finalFireBrigadeCities = getFinalFireBrigadeCities(timeout, country);
 
         saveToFile(jsonCountry, finalFireBrigadeCities);
-        System.out.println(finalFireBrigadeCities);
+        System.out.println("result: " + finalFireBrigadeCities + " \nSaved to: " + outFile);
     }
 
     public static Set<City> getFinalFireBrigadeCities(long timeout, Country country) {
@@ -48,7 +49,7 @@ public class Main {
     }
 
     private static void printProgressBar(long timeout, long timeMeasureStart) {
-        System.out.print("working");
+        System.out.print("finding best answer");
         long currentTime = 0;
         while (System.currentTimeMillis() - timeMeasureStart < timeout * 1000) {
             long ct = System.currentTimeMillis();
