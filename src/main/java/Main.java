@@ -4,6 +4,10 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         //TODO zakresy zmiennych większe niż 0
+        runProgram();
+    }
+
+    private static void runProgram() {
         JSONCountry jsonCountry = new JSONCountry("in.json", "out.json");
         long timeout = jsonCountry.getTimeoutInSeconds();
         Country country = jsonCountry.getCountry();
@@ -14,13 +18,13 @@ public class Main {
         System.out.println(finalFireBrigadeCities);
     }
 
-    private static Set<City> getFinalFireBrigadeCities(long timeout, Country country) {
+    public static Set<City> getFinalFireBrigadeCities(long timeout, Country country) {
         Set<City> finalFireBrigadeCities = new HashSet<>();
         long timeMeasureStart = System.currentTimeMillis();
         try {
             FireBrigadesThread fireBrigadesThread = new FireBrigadesThread(country);
             Thread thread = new Thread(fireBrigadesThread);
-            thread.start(); // Here runs the main program, it will read file, calculate optimal
+            thread.start(); // Here runs the main program, it will read file, calculate optimal result
 
             printProgressBar(timeout, timeMeasureStart);
             thread.interrupt();
