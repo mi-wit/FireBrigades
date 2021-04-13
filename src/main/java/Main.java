@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -24,7 +26,7 @@ public class Main {
         try {
             FireBrigadesThread fireBrigadesThread = new FireBrigadesThread(country);
             Thread thread = new Thread(fireBrigadesThread);
-            thread.start(); // Here runs the main program, it will read file, calculate optimal result
+            thread.start(); // Here runs the main program, it will read file, calculate optimal result.
 
             printProgressBar(timeout, timeMeasureStart);
             thread.interrupt();
@@ -39,8 +41,8 @@ public class Main {
     }
 
     private static void saveToFile(JSONCountry jsonCountry, Set<City> finalFireBrigadeCities) {
-        // converting Set<City> to Set<String>
-        City[] cities = finalFireBrigadeCities.toArray(City[]::new);
+        // converting <City> to <String>
+        List<City> cities = new ArrayList<>(finalFireBrigadeCities);
         Set<String> names= new HashSet<>();
         for (City city: cities)
             names.add(city.getName());
