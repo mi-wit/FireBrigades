@@ -1,5 +1,7 @@
 # FireBrigades
 
+FireBrigades is a simple program using k-vertex-connected graph.
+
 ## Running program 
 
 *Program requires Java RE 1.8 installed.*
@@ -12,7 +14,8 @@
 ## Compiling and running tests
 
 In order to run tests, you need to have [Apache Maven](https://maven.apache.org/install.html) installed.
-  
+
+Note: Maven requires Java JDK, otherwise program compilation will fail.
 	
   
 1.	Open cmd and go to FireBrigades project directory.
