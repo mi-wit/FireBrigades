@@ -18,7 +18,7 @@ In order to run tests, you need to have [Apache Maven](https://maven.apache.org/
 Note: Maven requires Java JDK, otherwise program compilation will fail.
 	
   
-1.	Open cmd and go to FireBrigades project directory.
+1.	Open cmd and go to FireBrigades whole project directory.
 2.	Run maven command:
 `mvn package`
 3.	Program will compile, and all tests will run, showing results.
