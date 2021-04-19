@@ -1,8 +1,11 @@
 import java.util.*;
-
+/*
+    Holds Graph structure.
+    Implements methods to operate on graph (find minimal amount of Cites with FireBrigades)
+ */
 public class Country {
 
-    private final Map<City, List<Road>> connectedCities;
+    private final Map<City, List<Road>> connectedCities;    // the main structure holding graph
     private long maxDrivingTime;
 
     public Country(Map<City, List<Road>> connectedCities) {
@@ -37,6 +40,11 @@ public class Country {
         return cities;
     }
 
+    /**
+     * Executes one search for minimal amount of Cites with FireBrigades.
+     * It's using random() to pick starting City point, so the results may vary.
+     * @return Minimal Set of Cities starting from randomly picked City or all Cities if thread interrupted.
+     */
     public Set<City> getApproximationOfCities() {
         ArrayList<City> cities = new ArrayList<>(connectedCities.keySet());
         Set<City> fireBrigadeCities = new HashSet<>();
@@ -58,17 +66,21 @@ public class Country {
 
     }
 
-
-    private void removeCities(City city, int drivingTime, ArrayList<City> cities) {
-        int thisCityDrivingTime = drivingTime;
+    /**
+     * Recurrently removes FireBrigades from Cities if the @maxDrivingTime was not exceeded.
+     * @param city Starting point with FireBrigade (with will not be removed)
+     * @param citiesWithFireBrigades pointer to list of Cities with remaining FireBrigades
+     */
+    private void removeCities(City city, int drivingTime, ArrayList<City> citiesWithFireBrigades) {
+        int thisCityDrivingTime = drivingTime;  // save current driving time from last FireBrigade before we go deeper
         Set<Road> visited = new HashSet<>();
         for (Road road : connectedCities.get(city)) {
             if (!visited.contains(road)) {
                 visited.add(road);
                 drivingTime += road.getDrivingTime();
                 if (drivingTime <= maxDrivingTime) {
-                    cities.remove(road.getDestinationCity());
-                    removeCities(road.getDestinationCity(), drivingTime, cities);
+                    citiesWithFireBrigades.remove(road.getDestinationCity());
+                    removeCities(road.getDestinationCity(), drivingTime, citiesWithFireBrigades);
                 }
                 drivingTime = thisCityDrivingTime;
             }

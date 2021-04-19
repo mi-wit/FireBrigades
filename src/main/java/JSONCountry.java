@@ -8,11 +8,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Holds JSON files to read and save result.
+ *
+ */
 public class JSONCountry {
     private final File inFile;
     private final File outFile;
-    private JSONObject jo;
-    private Country country;
+    private final JSONObject jo;
+    private final Country country;
 
     public JSONCountry(String inFileName, String outFileName) {
         this.inFile = new File(inFileName);
@@ -20,9 +24,13 @@ public class JSONCountry {
         String jsonText = readJSON();
         jo = new JSONObject(jsonText);
         country = new Country(new HashMap<>());
+
     }
 
-
+    /**
+     * Reads JSON file and creates country
+     * @return @{@link Country} object from JSON file
+     */
     public Country getCountry() {
         addCities();
         addRoads();

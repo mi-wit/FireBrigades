@@ -17,6 +17,7 @@ public class Main {
         Set<City> finalFireBrigadeCities = getFinalFireBrigadeCities(timeout, country);
 
         saveToFile(jsonCountry, finalFireBrigadeCities);
+
         System.out.println("result: " + finalFireBrigadeCities + " \nSaved to: " + outFile);
     }
 
@@ -26,9 +27,9 @@ public class Main {
         try {
             FireBrigadesThread fireBrigadesThread = new FireBrigadesThread(country);
             Thread thread = new Thread(fireBrigadesThread);
-            thread.start(); // Here runs the main program, it will read file, calculate optimal result.
+            thread.start(); // Here runs the main program, it will calculate optimal result until interrupted.
 
-            printProgressBar(timeout, timeMeasureStart);
+            printProgressAndHoldThreadFor(timeout, timeMeasureStart);
             thread.interrupt();
             thread.join();
 
@@ -50,7 +51,7 @@ public class Main {
         jsonCountry.saveJSON(names);
     }
 
-    private static void printProgressBar(long timeout, long timeMeasureStart) {
+    private static void printProgressAndHoldThreadFor(long timeout, long timeMeasureStart) {
         System.out.print("finding best answer");
         long currentTime = 0;
         while (System.currentTimeMillis() - timeMeasureStart < timeout * 1000) {

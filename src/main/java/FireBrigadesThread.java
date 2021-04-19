@@ -11,6 +11,7 @@ public class FireBrigadesThread implements Runnable {
 
     @Override
     public void run() {
+        // attempts to find best, minimal answer until interrupted from outside
         do {
             currentFireBrigadeCities = country.getApproximationOfCities();
             if (weGotABetterApproximation()) {
