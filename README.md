@@ -1,6 +1,6 @@
 # FireBrigades
 
-FireBrigades is a simple program using k-vertex-connected graph.
+FireBrigades is a simple program using k-vertex-connected graph. Given Cities (Nodes) and Roads (paths), program returns the Cities names in with will be Fire Brigades set in a way that firefighters can drive to every City under specified time, but also leaving as little FireBrigades as possible. 
 
 ## Running program 
 
